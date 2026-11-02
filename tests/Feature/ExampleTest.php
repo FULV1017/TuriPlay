@@ -9,10 +9,10 @@ class ExampleTest extends TestCase
     /**
      * A basic test example.
      */
-    public function test_the_application_redirects_to_the_panel(): void
+    public function test_the_application_shows_the_public_landing(): void
     {
         $response = $this->get('/');
 
-        $response->assertRedirect('/admin');
+        $response->assertOk()->assertViewIs('landing');
     }
 }

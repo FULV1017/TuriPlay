@@ -2,14 +2,17 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Dashboard;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
+use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Icons\Heroicon;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -27,6 +30,14 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('TuriPlay')
+            ->brandLogo(fn () => view('filament.partials.brand'))
+            ->renderHook(PanelsRenderHook::HEAD_END, fn () => view('filament.partials.theme'))
+            ->sidebarCollapsibleOnDesktop()
+            ->navigationItems([
+                NavigationItem::make('Explorar videos')
+                    ->icon(Heroicon::OutlinedGlobeAlt)
+                    ->url(fn (): string => route('public-videos.index')),
+            ])
             ->login()
             ->registration()
             ->colors([
