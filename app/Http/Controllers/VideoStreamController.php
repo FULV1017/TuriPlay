@@ -11,9 +11,11 @@ class VideoStreamController extends Controller
 {
     public function stream(Video $video): BinaryFileResponse
     {
-        abort_unless(auth()->check(), 403);
+        if (! $video->is_public) {
+            abort_unless(auth()->check(), 403);
 
-        Gate::authorize('view', $video);
+            Gate::authorize('view', $video);
+        }
 
         $path = Storage::disk('local')->path($video->path);
 
